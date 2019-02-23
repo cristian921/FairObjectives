@@ -274,7 +274,7 @@ def index(request):
 
 @login_required(login_url='/registration/login/')
 def objectives_allocation_fun(request):
-    my_work = objectives_allocation_task(request)
+    my_work = objectives_allocation_task.delay(request.user)
     print my_work
     work = AsyncResult(my_work)
     if work == "SUCCESS":

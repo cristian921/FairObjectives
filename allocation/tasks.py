@@ -14,13 +14,13 @@ today = dt.strptime("2019-01-29", '%Y-%m-%d').date()
 
 
 @celery.task(name="allo")
-def objectives_allocation_task(request):
+def objectives_allocation_task(user):
     print "Inzio"
-    objectives = Objective.objects.filter(user=request.user).order_by('time_horizon')
-    resources = UserResource.objects.filter(user=request.user).order_by()
+    objectives = Objective.objects.filter(user=user).order_by('time_horizon')
+    resources = UserResource.objects.filter(user=user).order_by()
     yearly_savings = resources.first().monthly_savings * 12
     objectives = objectives_query_set_minus_savings_to_dict(objectives, yearly_savings)
-    portfolio = AggregatedPortfolio.objects.filter(user=request.user).order_by()
+    portfolio = AggregatedPortfolio.objects.filter(user=user).order_by()
     if portfolio:
         asset_portfolio = PortfolioAsset.objects.filter(aggregated_portfolio=portfolio).order_by()
         prices = Series.objects.filter(asset__portfolioasset__aggregated_portfolio=portfolio, date=today)
