@@ -1,2 +1,2 @@
 web: gunicorn FairObjectives.wsgi --log-file -
-celery -A FairObjectives worker
+worker: python manage.py celery worker --loglevel=info
