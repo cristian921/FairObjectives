@@ -15,6 +15,7 @@ today = dt.strptime("2019-01-29", '%Y-%m-%d').date()
 
 @celery.task(name="allo")
 def objectives_allocation_task(request):
+    print "Inzio"
     objectives = Objective.objects.filter(user=request.user).order_by('time_horizon')
     resources = UserResource.objects.filter(user=request.user).order_by()
     yearly_savings = resources.first().monthly_savings * 12
@@ -66,6 +67,7 @@ def objectives_allocation_task(request):
             corr_dict[objectives[obKey]["time_horizon"]] = corr
         solutions = optimize_ob(objectives, returns_dict, risks_dict, corr_dict,
                                 initial_prices, max_quotes, prices_dict)
+        print "fine"
         # print json.dumps(solutions, indent=2)
         for obk in solutions:
             if "solution" in solutions[obk]:
