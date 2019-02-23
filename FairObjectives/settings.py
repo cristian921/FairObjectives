@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'djangobower',
     'django_nvd3',
+    'djcelery',
 ]
 
 MIDDLEWARE = [
