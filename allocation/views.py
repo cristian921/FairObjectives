@@ -275,9 +275,10 @@ def index(request):
 @login_required(login_url='/registration/login/')
 def objectives_allocation_fun(request):
     my_work = objectives_allocation_task(request)
+    print my_work
     work = AsyncResult(my_work)
-    if work.ready():
-        print work.result
+    if work == "SUCCESS":
+        return HttpResponseRedirect('/allocation/viewObjectivesAllocation/')
     else:
         return render(request, 'allocation/black.html')
 

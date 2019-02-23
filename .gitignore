@@ -105,3 +105,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+.idea/dataSources.local.xml
+.idea/workspace.xml
+celerybeat.pid
