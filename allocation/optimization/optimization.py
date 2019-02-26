@@ -26,7 +26,7 @@ def allocation(returns, risks, corr, initial_prices, time, value, max_quotes, ac
     problem.function = functions
 
     algorithm = PAES(problem)
-    algorithm.run(1000)
+    algorithm.run(1500)
 
     feasible_solutions = [s for s in algorithm.result if s.feasible]
 
