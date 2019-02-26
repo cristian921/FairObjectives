@@ -41,7 +41,7 @@ def get_price(queryset, value):
 today = dt.strptime("2019-01-29", '%Y-%m-%d').date()
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def add_objective(request):
     form = ObjectiveForm(request.POST or None)
     form.fields["user"].initial = request.user
@@ -51,7 +51,7 @@ def add_objective(request):
     return render(request, 'allocation/form_objective.html', {'form': form})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def update_objective(request, pk):
     objective = get_object_or_404(Objective, pk=pk)
     form = ObjectiveForm(request.POST or None, instance=objective)
@@ -63,7 +63,7 @@ def update_objective(request, pk):
     return render(request, 'allocation/form_objective.html', {'form': form})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def delete_objective(request, pk):
     objective = get_object_or_404(Objective, pk=pk)
     if request.method == 'POST':
@@ -72,7 +72,7 @@ def delete_objective(request, pk):
     return render(request, 'allocation/confirm_delete.html', {'object': objective})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def add_resources(request):
     form = ResourcesForm(request.POST or None)
     form.fields["user"].initial = request.user
@@ -82,7 +82,7 @@ def add_resources(request):
     return render(request, 'allocation/form_resources.html', {'form': form})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def update_resources(request, pk):
     resources = get_object_or_404(UserResource, pk=pk)
     form = ResourcesForm(request.POST or None, instance=resources)
@@ -93,7 +93,7 @@ def update_resources(request, pk):
     return render(request, 'allocation/form_resources.html', {'form': form})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def delete_resources(request, pk, template_name='books/confirm_delete.html'):
     resources = get_object_or_404(UserResource, pk=pk)
     if request.method == 'POST':
@@ -102,7 +102,7 @@ def delete_resources(request, pk, template_name='books/confirm_delete.html'):
     return render(request, template_name, {'object': resources})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def add_aggregated_portfolio(request):
     form = AggregatedPortfolioForm(request.POST or None)
     form.fields["user"].initial = request.user
@@ -112,7 +112,7 @@ def add_aggregated_portfolio(request):
     return render(request, 'allocation/form_aggregated_portfolio.html', {'form': form})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def update_aggregated_portfolio(request, pk):
     aggregated_portfolio = get_object_or_404(AggregatedPortfolio, pk=pk)
     form = ObjectiveForm(request.POST or None, instance=aggregated_portfolio)
@@ -123,7 +123,7 @@ def update_aggregated_portfolio(request, pk):
     return render(request, 'allocation/form_aggregated_portfolio.html', {'form': form})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def delete_aggregated_portfolio(request, pk):
     aggregated_portfolio = get_object_or_404(AggregatedPortfolio, pk=pk)
     if request.method == 'POST':
@@ -132,7 +132,7 @@ def delete_aggregated_portfolio(request, pk):
     return render(request, 'allocation/confirm_delete.html', {'object': aggregated_portfolio})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def add_asset_portfolio(request, pk):
     aggregated_portfolio = AggregatedPortfolio.objects.filter(pk=pk).first()
     form = PortfolioAssetForm(request.POST or None)
@@ -144,7 +144,7 @@ def add_asset_portfolio(request, pk):
     return render(request, 'allocation/form_portfolio_asset.html', {'form': form})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def update_asset_portfolio(request, pk):
     portfolio_asset = get_object_or_404(PortfolioAsset, pk=pk)
     form = PortfolioAssetForm(request.POST or None, instance=portfolio_asset)
@@ -154,7 +154,7 @@ def update_asset_portfolio(request, pk):
     return render(request, 'allocation/form_portfolio_asset.html', {'form': form})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def delete_portfolio_asset(request, pk):
     portfolio_asset = get_object_or_404(PortfolioAsset, pk=pk)
     if request.method == 'POST':
@@ -163,7 +163,7 @@ def delete_portfolio_asset(request, pk):
     return render(request, 'allocation/confirm_delete.html', {'object': portfolio_asset})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def index(request):
     if ObjectiveSolution.objects.filter(objective__user=request.user):
         return HttpResponseRedirect('/allocation/viewObjectivesAllocation/')
@@ -217,7 +217,7 @@ def index(request):
         return render(request, 'allocation/index.html', context)
 
 
-# @login_required(login_url='/registration/login/')
+# @login_required(login_url='/login/')
 # def objectives_allocation_fun(request):
 #     objectives = Objective.objects.filter(user=request.user).order_by('time_horizon')
 #     resources = UserResource.objects.filter(user=request.user).order_by()
@@ -271,7 +271,7 @@ def index(request):
 #
 #     return HttpResponseRedirect("/allocation/view_objective_allocation")
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def objectives_allocation_fun(request):
     objectives = Objective.objects.filter(user=request.user).order_by('time_horizon')
     resources = UserResource.objects.filter(user=request.user).order_by()
@@ -344,7 +344,7 @@ def objectives_allocation_fun(request):
     return HttpResponseRedirect('/allocation/viewObjectivesAllocation/')
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def delete_solution(request, pk):
     obs = get_object_or_404(ObjectiveSolution, pk=pk)
     if request.method == 'POST':
@@ -353,7 +353,7 @@ def delete_solution(request, pk):
     return render(request, 'allocation/confirm_delete.html', {'object': obs})
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def delete_all_solution(request):
     solutions = ObjectiveSolution.objects.filter(objective__user=request.user)
     for solution in solutions:
@@ -361,7 +361,7 @@ def delete_all_solution(request):
     return HttpResponseRedirect('/allocation/')
 
 
-@login_required(login_url='/registration/login/')
+@login_required(login_url='/login/')
 def view_objective_allocation(request):
     portfolio_user = PortfolioAsset.objects.filter(aggregated_portfolio__user=request.user)
     objective_solution = ObjectiveSolution.objects.filter(objective__user=request.user)
