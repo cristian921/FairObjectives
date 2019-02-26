@@ -324,7 +324,7 @@ def objectives_allocation_fun(request):
             corr_dict[objectives[obKey]["time_horizon"]] = corr
         solutions = optimize_ob(objectives, returns_dict, risks_dict, corr_dict,
                                 initial_prices, max_quotes, prices_dict)
-        print "fine"
+        #print "fine"
         # print json.dumps(solutions, indent=2)
         for obk in solutions:
             if "solution" in solutions[obk]:
@@ -381,7 +381,7 @@ def view_objective_allocation(request):
             quotes = dict()
             for assetP in portfolio:
                 quotes[assetP.asset] = assetP.quote
-                print assetP.asset.name, assetP.quote
+                #print assetP.asset.name, assetP.quote
                 if assetP.asset.codec in quotes_used:
 
                     quotes_used[assetP.asset.codec] += assetP.quote

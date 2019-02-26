@@ -1,6 +1,7 @@
 from platypus import *
 from utils import *
 import collections
+import operator
 
 
 def allocation(returns, risks, corr, initial_prices, time, value, max_quotes, actual_prices):
@@ -22,11 +23,11 @@ def allocation(returns, risks, corr, initial_prices, time, value, max_quotes, ac
     problem.constraints[0:len(max_quotes)] = ">= 5"
     problem.constraints[len(max_quotes)] = ">="+str(value * 0.95)
     problem.constraints[len(max_quotes)+1] = "<="+str(value * 1.05)
-    problem.constraints[len(max_quotes)+2] = ">=" + str(0.01)
+    problem.constraints[len(max_quotes)+2] = ">=" + str(0.015)
     problem.function = functions
 
     algorithm = PAES(problem)
-    algorithm.run(2000)
+    algorithm.run(1000)
 
     feasible_solutions = [s for s in algorithm.result if s.feasible]
 
@@ -68,7 +69,10 @@ def optimize_ob(objectives, returns, risks, corr, initial_prices, max_quotes, ac
         risks[key] = collections.OrderedDict(sorted(risks[key].items()))
         initial_prices[key] = collections.OrderedDict(sorted(initial_prices[key].items()))
     max_quotes = collections.OrderedDict(sorted(max_quotes.items()))
+    objectives = OrderedDict(sorted(objectives.items(), key=lambda index: index[1]['priority']))
+    #print json.dumps(objectives, indent=2)
     for obk in objectives:
+        #print objectives[obk]["priority"]
         if len(max_quotes) > 0:
             sols = allocation(returns[objectives[obk]["time_horizon"]], risks[objectives[obk]["time_horizon"]],
                               corr[objectives[obk]["time_horizon"]], initial_prices[objectives[obk]["time_horizon"]],
@@ -77,15 +81,13 @@ def optimize_ob(objectives, returns, risks, corr, initial_prices, max_quotes, ac
             if sols[0]:
                 feasible = True
                 sol = sols[0][0]
-                print sols[0][0]
             else:
                 feasible = False
                 sol = sols[1][0]
-                print sol
-           # print "value objective", objectives[obk]["value_minus_savings"]
-         #   print "quote", sol.variables
-          #  print "constraints", sol.constraints
-          #  print "objectives", sol.objectives
+            #print "value objective", objectives[obk]["value_minus_savings"]
+            #print "quote", sol.variables
+            #print "constraints", sol.constraints
+            #print "objectives", sol.objectives
             sol_quote = dict()
             i = 0
             for asset in max_quotes:
