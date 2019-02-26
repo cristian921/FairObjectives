@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'djangobower',
     'django_nvd3',
-    'djcelery',
 ]
 
 MIDDLEWARE = [
@@ -144,19 +143,3 @@ BOWER_INSTALLED_APPS = (
     'd3#3.3.13',
     'nvd3#1.7.1',
 )
-
-# IMPORT LOCAL SETTINGS
-# =====================
-try:
-    from settings_local import *
-except ImportError:
-    pass
-
-
-# CELERY STUFF
-BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Africa/Nairobi'

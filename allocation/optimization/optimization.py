@@ -11,22 +11,22 @@ def allocation(returns, risks, corr, initial_prices, time, value, max_quotes, ac
         constraints.append((return_portfolio(returns, weights)+1)**time * portfolio_value(actual_prices, q))
         constraints.append((return_portfolio(returns, weights)+1)**time * portfolio_value(actual_prices, q))
         constraints.append(return_portfolio(returns, weights))
-        return [risk_portfolio(weights, risks, corr), sum(q)], constraints
+        return [risk_portfolio(weights, risks, corr)], constraints
 
-    problem = Problem(len(max_quotes), 2, len(max_quotes)+3)
+    problem = Problem(len(max_quotes), 1, len(max_quotes)+3)
     i = 0
     for asset in max_quotes:
         problem.types[i] = Real(0, max_quotes[asset])
         i += 1
 
     problem.constraints[0:len(max_quotes)] = ">= 5"
-    problem.constraints[len(max_quotes)] = ">="+str(value * 0.98)
-    problem.constraints[len(max_quotes)+1] = "<="+str(value * 1.02)
+    problem.constraints[len(max_quotes)] = ">="+str(value * 0.95)
+    problem.constraints[len(max_quotes)+1] = "<="+str(value * 1.05)
     problem.constraints[len(max_quotes)+2] = ">=" + str(0.01)
     problem.function = functions
 
     algorithm = PAES(problem)
-    algorithm.run(10000)
+    algorithm.run(1000)
 
     feasible_solutions = [s for s in algorithm.result if s.feasible]
 
@@ -69,7 +69,6 @@ def optimize_ob(objectives, returns, risks, corr, initial_prices, max_quotes, ac
         initial_prices[key] = collections.OrderedDict(sorted(initial_prices[key].items()))
     max_quotes = collections.OrderedDict(sorted(max_quotes.items()))
     for obk in objectives:
-        print obk
         if len(max_quotes) > 0:
             sols = allocation(returns[objectives[obk]["time_horizon"]], risks[objectives[obk]["time_horizon"]],
                               corr[objectives[obk]["time_horizon"]], initial_prices[objectives[obk]["time_horizon"]],
@@ -78,9 +77,11 @@ def optimize_ob(objectives, returns, risks, corr, initial_prices, max_quotes, ac
             if sols[0]:
                 feasible = True
                 sol = sols[0][0]
+                print sols[0][0]
             else:
                 feasible = False
                 sol = sols[1][0]
+                print sol
            # print "value objective", objectives[obk]["value_minus_savings"]
          #   print "quote", sol.variables
           #  print "constraints", sol.constraints

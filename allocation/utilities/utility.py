@@ -59,15 +59,15 @@ def difference_date(date, time):
     return date - relativedelta(years=time)
 
 
-def risk_corr(asset_series_dict):
-   # print asset_series_dict
+def risk_corr(asset_series_dict, start_date=None, end_date=None):
     rend_dict = dict()
     risks = dict()
     for asset in asset_series_dict:
         asset_df = asset_series_dict[asset]
-        start_date = asset_df.iloc[0]["date"]
-        end_date = asset_df.iloc[len(asset_df) - 1]["date"]
-        end_date += relativedelta(months=1)
+        if start_date is None and end_date is None:
+            start_date = asset_df.iloc[0]["date"]
+            end_date = asset_df.iloc[len(asset_df) - 1]["date"]
+        #end_date += relativedelta(months=1)
 
         date = start_date
         month_rend = []
@@ -75,6 +75,7 @@ def risk_corr(asset_series_dict):
             z = asset_df[(pd.to_datetime(asset_df["date"]).dt.year == date.year) &
                          (pd.to_datetime(asset_df["date"]).dt.month == date.month)]
             y = z["price"]
+            #print asset, date.year, date.month
             rend = (y.iloc[len(y) - 1] / y.iloc[0]) - 1
             month_rend.append(rend)
             date += relativedelta(months=+1)
@@ -84,7 +85,8 @@ def risk_corr(asset_series_dict):
 
     rend_df = pd.DataFrame.from_dict(rend_dict)
     corr = rend_df.corr()
-    return risks, corr
+    cov = rend_df.cov()
+    return risks, cov
 
 
 def risk_asset(asset_df):
